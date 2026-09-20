@@ -1,7 +1,8 @@
-import { v2 as cloudinary } from 'cloudinary';
+import * as cloudinaryPackage from 'cloudinary';
 import multerStorageCloudinary from "multer-storage-cloudinary";
 
 const cloudinaryStorageFactory = multerStorageCloudinary.default || multerStorageCloudinary;
+const cloudinary = cloudinaryPackage.v2;
 
 // Cloudinary is used for listing image uploads so the app can store files outside the local server.
 cloudinary.config({
@@ -11,7 +12,7 @@ cloudinary.config({
 });
 
 const storage = cloudinaryStorageFactory({
-    cloudinary: cloudinary,
+    cloudinary: cloudinaryPackage,
     params: {
         folder: "Wanderlust_DEV",
         allowedFormats: ["jpeg", "png", "jpg"]
