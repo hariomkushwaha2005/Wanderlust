@@ -72,7 +72,7 @@
   <a href="/listings/<%=listing._id%>" class="listing-link">
     <div class="card listing-card col">
       <img
-        src="<%= listing.image.url %>"
+        src="<%= listing.image?.url || 'https://via.placeholder.com/600x400?text=No+Image' %>"
         class="card-img-top"
         alt="Listing-image"
         style="height: 20rem"

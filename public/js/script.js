@@ -13,4 +13,10 @@
             form.classList.add('was-validated')
         }, false)
     })
+
+    document.querySelectorAll('[data-bs-dismiss="alert"]').forEach(button => {
+        button.addEventListener('click', () => {
+            button.closest('.alert')?.remove()
+        })
+    })
 })()
