@@ -1,0 +1,99 @@
+<% layout("/layouts/boilerplate") -%>
+
+<div class="row mt-3">
+  <div class="col-8 offset-2">
+    <h3>Edit Listing</h3>
+    <form
+      action="/listings/<%= listing._id%>?_method=PUT"
+      method="post"
+      enctype="multipart/form-data"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label">Add a Title</label>
+        <input
+          type="text"
+          class="form-control"
+          name="listing[title]"
+          value="<%= listing.title %>"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          placeholder="description"
+          name="listing[description]"
+          class="form-control"
+        >
+<%= listing.description %></textarea
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label">Current Image</label>
+        <br />
+        <img
+          src="<%= originalImageUrl %>"
+          alt="<%= listing.title %>"
+          class="img-thumbnail"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload New Image</label>
+        <input type="file" name="listing[image]" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input
+          type="number"
+          name="listing[price]"
+          class="form-control"
+          value="<%= listing.price %>"
+        />
+      </div>
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="country" class="form-label">Country</label>
+          <input
+            type="text"
+            name="listing[country]"
+            class="form-control"
+            value="<%= listing.country %>"
+          />
+        </div>
+        <div class="mb-3 col-md-8">
+          <label for="location" class="form-label">Location</label>
+          <input
+            type="text"
+            name="listing[location]"
+            class="form-control"
+            value="<%= listing.location %>"
+          />
+        </div>
+        <div class="mb-3 col-md-12">
+          <label class="form-label d-block">Select Categories</label>
+          <div class="d-flex flex-wrap gap-3">
+            <% const categories = ["Trending", "Rooms", "Iconic Cities", "Mountains", "Castles", "Amazing Pools", "Camping", "Farms", "Arctic", "Domes", "Boats"]; %>
+            <% for (let category of categories) { %>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="editCat<%= category.replace(/\s+/g, "") %>"
+                  name="listing[categories]"
+                  value="<%= category %>"
+                  <%= listing.categories && listing.categories.includes(category) ? "checked" : "" %>
+                >
+                <label class="form-check-label" for="editCat<%= category.replace(/\s+/g, "") %>"><%= category %></label>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-dark edit-btn mt-3">Edit</button>
+      <br /><br />
+    </form>
+  </div>
+</div>
