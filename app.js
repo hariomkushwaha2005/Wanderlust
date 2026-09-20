@@ -24,6 +24,11 @@ import MongoStore from 'connect-mongo';
 // Shared Express app setup for the Wanderlust application.
 // This file wires up middleware, authentication, routers, and the MongoDB connection.
 const app = express();
+const isProduction = process.env.NODE_ENV === "production";
+
+if (isProduction) {
+    app.set("trust proxy", 1);
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -93,8 +98,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Session configuration: keep login state across requests and secure cookies in production.
-const isProduction = process.env.NODE_ENV === "production";
-
 const store = MongoStore.create({
     mongoUrl: mongoUrl,
     crypto: {
