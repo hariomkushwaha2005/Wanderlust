@@ -10,7 +10,8 @@ body{
 }
 
 .navbar{
-    height: 5rem;
+    min-height: 5rem;
+    height: auto;
     background-color: white;
 }
 
@@ -90,17 +91,64 @@ body{
     border: none !important;
 }
 
-.edit-btn{
+.edit-btn,
+.delete-btn{
     background-color: #fe424d !important;
     border: none !important;
+    color: #fff !important;
+}
+
+.delete-btn{
+    background-color: #222 !important;
+}
+
+.edit-btn:hover,
+.delete-btn:hover{
+    background-color: #d93640 !important;
+    color: #fff !important;
+}
+
+.delete-btn:hover{
+    background-color: #000 !important;
 }
 
 .show-image{
-    height: 30vh;
+    display: block;
+    width: 100% !important;
+    height: auto;
+    max-height: 60vh;
+    border-radius: 1.5rem !important;
+    clip-path: inset(0 round 1.5rem);
+    object-fit: cover !important;
 }
 
-.btns {
+.show-image-wrap{
+    overflow: hidden;
+    border-radius: 1.5rem;
+}
+
+.show-actions {
     display: flex;
+    gap: 0.75rem;
+    width: min(100%, 33rem);
+    margin: 0 auto 2rem;
+    padding: 0 0.75rem;
+}
+
+.show-actions .btn,
+.show-actions form {
+    flex: 1;
+}
+
+.show-actions .btn {
+    width: 100%;
+}
+
+@media (max-width: 575.98px) {
+    .show-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
 }
 
 .show-card{

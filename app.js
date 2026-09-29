@@ -83,7 +83,29 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.use(helmet());
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdn.maptiler.com"],
+                workerSrc: ["'self'", "blob:"],
+                connectSrc: ["'self'", "https://api.maptiler.com"],
+                imgSrc: [
+                    "'self'",
+                    "data:",
+                    "https://res.cloudinary.com",
+                    "https://images.unsplash.com",
+                    "https://plus.unsplash.com",
+                    "https://via.placeholder.com",
+                ],
+            },
+        },
+    })
+);
+
+// Static assets should not consume the request budget intended for app routes.
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(
     rateLimit({
         windowMs: 15 * 60 * 1000,
@@ -95,19 +117,20 @@ app.use(
 // Register request parsing and static asset middleware.
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
 
 // Session configuration: keep login state across requests and secure cookies in production.
-const store = MongoStore.create({
-    mongoUrl: mongoUrl,
-    crypto: {
-        secret: process.env.SECRET,
-    },
-    touchAfter: 24 * 3600,
-});
+const store = process.env.NODE_ENV === "test"
+    ? undefined
+    : MongoStore.create({
+        mongoUrl: mongoUrl,
+        crypto: {
+            secret: process.env.SECRET,
+        },
+        touchAfter: 24 * 3600,
+    });
 
-store.on("error", (err) => {
-    console.log("ERROR in MONGO SESSION", err);
+store?.on("error", (err) => {
+    console.error("ERROR in MONGO SESSION", err);
 });
 
 const sessionOptions = {

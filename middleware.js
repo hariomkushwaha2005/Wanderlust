@@ -2,16 +2,7 @@ import Review from "./models/reviews.js";
 import Listing from "./models/listing.js";
 import { reviewSchema, listingSchema } from "./schema.js";
 import ExpressError from "./utils/ExpressError.js";
-
-// Accept only same-site relative redirects to prevent phishing/open-redirect attacks.
-const sanitizeRedirect = (value, fallback = "/listings") => {
-    if (typeof value !== "string") return fallback;
-    const trimmed = value.trim();
-    if (!trimmed || trimmed.startsWith("//") || !trimmed.startsWith("/")) {
-        return fallback;
-    }
-    return trimmed;
-};
+import sanitizeRedirect from "./utils/sanitizeRedirect.js";
 
 // Protect routes that require an authenticated user before they can be accessed.
 export const isLoggedIn = (req, res, next) => {

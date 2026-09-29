@@ -1,20 +1,19 @@
 <% layout("/layouts/boilerplate") -%>
 <script id="listing-data" type="application/json">
-  <%- JSON.stringify(listing) %>
-</script>
-<script>
-  window.mapKey = "<%= process.env.MAP_API_KEY %>";
+  <%- JSON.stringify(listing).replace(/</g, "\\u003c") %>
 </script>
 <div class="row mt-3">
   <div class="col-8 offset-3">
     <h3><%=listing.title%></h3>
   </div>
   <div class="card listing-card col-6 offset-3 show-card">
-    <img
-      src="<%= listing.image?.url || 'https://via.placeholder.com/600x400?text=No+Image' %>"
-      class="card-img-top show-image"
-      alt="listing_image"
-    />
+    <div class="show-image-wrap">
+      <img
+        src="<%= (typeof listing.image === 'string' ? listing.image : listing.image?.url || listing.image?.path || listing.image?.secure_url) || '/images/listing-placeholder.svg' %>"
+        class="card-img-top show-image"
+        alt="listing_image"
+      />
+    </div>
     <div class="card-body">
       <p class="card-text">
         <i>
@@ -29,31 +28,31 @@
       <p class="card-text"><%=listing.location%></p>
       <p class="card-text"><%=listing.country%></p>
       <% if (listing.categories && listing.categories.length) { %>
-        <div class="card-text mb-2">
-          <% for (let category of listing.categories) { %>
-            <span class="badge rounded-pill bg-light text-dark border me-2"><%= category %></span>
-          <% } %>
-        </div>
+      <div class="card-text mb-2">
+        <% for (let category of listing.categories) { %>
+        <span class="badge rounded-pill bg-light text-dark border me-2"
+          ><%= category %></span
+        >
+        <% } %>
+      </div>
       <% } %>
     </div>
   </div>
   <br />
   <% if (curUser && listing.owner && curUser._id.equals(listing.owner._id)) { %>
-  <div class="btns">
-    <a
-      href="/listings/<%=listing._id%>/edit"
-      class="btn btn-dark col-1 offset-3 edit-btn"
-      >Edit</a
+  <div class="show-actions">
+    <a href="/listings/<%=listing._id%>/edit" class="btn edit-btn"
+      >Edit listing</a
     >
     <form action="/listings/<%=listing._id%>?_method=DELETE" method="post">
-      <button class="btn btn-dark offset-5">Delete</button>
+      <button class="btn delete-btn" type="submit">Delete listing</button>
     </form>
   </div>
   <% } %>
 
   <div class="col-8 offset-3 mb-3">
     <% if(curUser) { %>
-      <hr />
+    <hr />
     <h4>Leave a Review</h4>
     <form
       action="/listings/<%=listing.id%>/reviews"
@@ -154,9 +153,9 @@
     </div>
     <% } %>
   </div>
-    <div class="col-8 offset-3">
-      <h3>Where you'll be</h3>
-      <div id="map"></div>
+  <div class="col-8 offset-3">
+    <h3>Where you'll be</h3>
+    <div id="map" data-map-key="<%= process.env.MAP_API_KEY %>"></div>
   </div>
 </div>
 <script src="/js/listing-show.js"></script>

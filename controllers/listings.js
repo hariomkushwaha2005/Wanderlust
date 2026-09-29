@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import express from 'express';
 import Listing from "../models/listing.js";
 import * as maptilerClient from '@maptiler/client';
 import { cloudinary } from "../cloudConfig.js";
@@ -44,8 +43,11 @@ const createListing = async (req, res, next) => {
             throw new ExpressError(400, "Location not found. Please enter a more specific place.");
         }
 
-        const url = req.file ? req.file.path : null;
-        const filename = req.file ? req.file.filename : null;
+        const url = req.file?.path || req.file?.secure_url || null;
+        const filename = req.file?.filename || req.file?.public_id || null;
+        if (req.file && (!url || !filename)) {
+            throw new ExpressError(400, "Image upload failed. Please try again.");
+        }
         req.body.listing.image = { url, filename };
 
         const newlisting = new Listing(req.body.listing);
@@ -89,7 +91,7 @@ const renderEditForm = async (req, res) => {
 
     let originalImageUrl = listing.image?.url
         ? listing.image.url.replace("upload/", "upload/w_250/")
-        : "https://via.placeholder.com/250x180?text=No+Image";
+        : "/images/listing-placeholder.svg";
 
     res.render("listings/edit.ejs", { listing, originalImageUrl });
 };
@@ -104,7 +106,13 @@ const updateListing = async (req, res, next) => {
             return res.redirect("/listings");
         }
 
-        let listingData = { ...req.body.listing };
+        const submittedListing = req.body?.listing;
+        if (!submittedListing || typeof submittedListing !== "object") {
+            throw new ExpressError(400, "Invalid listing data.");
+        }
+
+        let listingData = { ...submittedListing };
+        let oldImageFilename;
 
         if (listingData.location && listingData.location !== listing.location) {
             const response = await maptilerClient.geocoding.forward(listingData.location, { limit: 1 });
@@ -115,15 +123,22 @@ const updateListing = async (req, res, next) => {
         }
 
         if (req.file) {
-            if (listing.image?.filename) {
-                await cloudinary.uploader.destroy(listing.image.filename);
+            const imageUrl = req.file.path || req.file.secure_url;
+            const imageFilename = req.file.filename || req.file.public_id;
+            if (!imageUrl || !imageFilename) {
+                throw new ExpressError(400, "Image upload failed. Please try again.");
             }
+
+            oldImageFilename = listing.image?.filename;
             listingData.image = {
-                url: req.file.path,
-                filename: req.file.filename,
+                url: imageUrl,
+                filename: imageFilename,
             };
-        } else if (listing.image) {
-            listingData.image = listing.image;
+        } else if (listing.image?.url) {
+            listingData.image = {
+                url: listing.image.url,
+                filename: listing.image.filename,
+            };
         } else {
             delete listingData.image;
         }
@@ -131,6 +146,14 @@ const updateListing = async (req, res, next) => {
         await Listing.findByIdAndUpdate(id, listingData, {
             runValidators: true,
         });
+
+        if (oldImageFilename) {
+            try {
+                await cloudinary.uploader.destroy(oldImageFilename);
+            } catch (cleanupError) {
+                console.error("Unable to remove the previous listing image:", cleanupError.message);
+            }
+        }
 
         req.flash("success", "Listing Updated!");
         return res.redirect(`/listings/${id}`);

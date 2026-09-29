@@ -1,97 +1,117 @@
 <% layout("/layouts/boilerplate") -%>
 
-<div id="listing-page" data-active-category="<%= typeof category !== 'undefined' ? category : '' %>">
-<div id="filters">
+<div
+  id="listing-page"
+  data-active-category="<%= typeof category !== 'undefined' ? category : '' %>"
+>
+  <div id="filters">
+    <div class="category-bar" aria-label="Listing categories">
+      <a class="filter" id="Trending" href="/listings?category=Trending">
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+      </a>
 
-  <div class="filter" id="Trending" onclick="window.location.href='/listings?category=Trending'">
-    <div><i class="fa-solid fa-fire"></i></div>
-    <p>Trending</p>
-  </div>
+      <a class="filter" id="Rooms" href="/listings?category=Rooms">
+        <div><i class="fa-solid fa-bed"></i></div>
+        <p>Rooms</p>
+      </a>
 
-  <div class="filter" id="Rooms" onclick="window.location.href='/listings?category=Rooms'">
-    <div><i class="fa-solid fa-bed"></i></div>
-    <p>Rooms</p>
-  </div>
+      <a
+        class="filter"
+        id="Iconic Cities"
+        href="/listings?category=Iconic%20Cities"
+      >
+        <div><i class="fa-solid fa-mountain-city"></i></div>
+        <p>Iconic Cities</p>
+      </a>
 
-  <div class="filter" id="Iconic Cities" onclick="window.location.href='/listings?category=Iconic%20Cities'">
-    <div><i class="fa-solid fa-mountain-city"></i></div>
-    <p>Iconic Cities</p>
-  </div>
+      <a class="filter" id="Mountains" href="/listings?category=Mountains">
+        <div><i class="fa-solid fa-mountain"></i></div>
+        <p>Mountains</p>
+      </a>
 
-  <div class="filter" id="Mountains" onclick="window.location.href='/listings?category=Mountains'">
-    <div><i class="fa-solid fa-mountain"></i></div>
-    <p>Mountains</p>
-  </div>
+      <a class="filter" id="Castles" href="/listings?category=Castles">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+        <p>Castles</p>
+      </a>
 
-  <div class="filter" id="Castles" onclick="window.location.href='/listings?category=Castles'">
-    <div><i class="fa-brands fa-fort-awesome"></i></div>
-    <p>Castles</p>
-  </div>
+      <a
+        class="filter"
+        id="Amazing Pools"
+        href="/listings?category=Amazing%20Pools"
+      >
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+        <p>Amazing Pools</p>
+      </a>
 
-  <div class="filter" id="Amazing Pools" onclick="window.location.href='/listings?category=Amazing%20Pools'">
-    <div><i class="fa-solid fa-person-swimming"></i></div>
-    <p>Amazing Pools</p>
-  </div>
+      <a class="filter" id="Camping" href="/listings?category=Camping">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+      </a>
 
-  <div class="filter" id="Camping" onclick="window.location.href='/listings?category=Camping'">
-    <div><i class="fa-solid fa-campground"></i></div>
-    <p>Camping</p>
-  </div>
+      <a class="filter" id="Farms" href="/listings?category=Farms">
+        <div><i class="fa-solid fa-cow"></i></div>
+        <p>Farms</p>
+      </a>
 
-  <div class="filter" id="Farms" onclick="window.location.href='/listings?category=Farms'">
-    <div><i class="fa-solid fa-cow"></i></div>
-    <p>Farms</p>
-  </div>
+      <a class="filter" id="Arctic" href="/listings?category=Arctic">
+        <div><i class="fa-regular fa-snowflake"></i></div>
+        <p>Arctic</p>
+      </a>
 
-  <div class="filter" id="Arctic" onclick="window.location.href='/listings?category=Arctic'">
-    <div><i class="fa-regular fa-snowflake"></i></div>
-    <p>Arctic</p>
-  </div>
+      <a class="filter" id="Domes" href="/listings?category=Domes">
+        <div><i class="fa-solid fa-igloo"></i></div>
+        <p>Domes</p>
+      </a>
 
-  <div class="filter" id="Domes" onclick="window.location.href='/listings?category=Domes'">
-    <div><i class="fa-solid fa-igloo"></i></div>
-    <p>Domes</p>
-  </div>
-
-  <div class="filter" id="Boats" onclick="window.location.href='/listings?category=Boats'">
-    <div><i class="fa-solid fa-ship"></i></div>
-    <p>Boats</p>
-  </div>
-  
-  <div class="tax-toggle">
-    <div class="form-check-reverse form-switch ">
-      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-      <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+      <a class="filter" id="Boats" href="/listings?category=Boats">
+        <div><i class="fa-solid fa-ship"></i></div>
+        <p>Boats</p>
+      </a>
     </div>
-  </div>
 
- </div>
-
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-  <%for(let listing of allListing){%>
-  <a href="/listings/<%=listing._id%>" class="listing-link">
-    <div class="card listing-card col">
-      <img
-        src="<%= listing.image?.url || 'https://via.placeholder.com/600x400?text=No+Image' %>"
-        class="card-img-top"
-        alt="Listing-image"
-        style="height: 20rem"
-      />
-      <div class="card-img-overlay"></div>
-      <div class="card-body">
-        <p class="card-text">
-          <b>
-            <%=listing.title%>
-          </b>
-          <br />
-          &#8377;
-          <%=listing.price.toLocaleString("en-IN")%>/ night
-          <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
-        </p>
+    <div class="tax-toggle">
+      <div class="form-check-reverse form-switch">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="switchCheckDefault"
+        />
+        <label class="form-check-label" for="switchCheckDefault"
+          >Display total after taxes</label
+        >
       </div>
     </div>
-  </a>
-  <%}%>
-</div>
+  </div>
+
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <%for(let listing of allListing){%>
+    <a href="/listings/<%=listing._id%>" class="listing-link">
+      <div class="card listing-card col">
+        <img
+          src="<%= (typeof listing.image === 'string' ? listing.image : listing.image?.url || listing.image?.path || listing.image?.secure_url) || '/images/listing-placeholder.svg' %>"
+          class="card-img-top"
+          alt="Listing-image"
+          style="height: 20rem"
+        />
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text">
+            <b>
+              <%=listing.title%>
+            </b>
+            <br />
+            &#8377;
+            <span class="listing-price" data-base-price="<%= listing.price %>"
+              ><%=listing.price.toLocaleString("en-IN")%></span
+            >/ night
+            <i class="tax-info">&nbsp; &nbsp; (incl. 18% GST)</i>
+          </p>
+        </div>
+      </div>
+    </a>
+    <%}%>
+  </div>
 </div>
 <script src="/js/listings.js"></script>

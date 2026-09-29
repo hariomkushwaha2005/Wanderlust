@@ -44,6 +44,7 @@ Wandarlust/
 │   └── users.js
 ├── init/
 │   ├── data.js
+│   ├── featuredData.js
 │   └── index.js
 ├── models/
 │   ├── listing.js
@@ -59,14 +60,14 @@ Wandarlust/
 ├── tests/
 │   └── app.test.js
 ├── utils/
-│   └── ExpressError.js
+│   ├── ExpressError.js
+│   └── sanitizeRedirect.js
 ├── views/
 │   ├── error.ejs
 │   ├── includes/
 │   ├── layouts/
 │   ├── listings/
 │   └── users/
-└── .env
 ```
 
 ## 🚀 Getting Started
@@ -75,7 +76,7 @@ Wandarlust/
 
 Before running the app, make sure you have:
 
-- Node.js 20+ recommended
+- Node.js 24.18.1 or newer
 - MongoDB Atlas or a local MongoDB instance
 - A Cloudinary account
 - A MapTiler API key
@@ -93,8 +94,10 @@ CLOUD_API_KEY=your_cloudinary_api_key
 CLOUD_API_SECRET=your_cloudinary_api_secret
 PORT=8080
 NODE_ENV=development
-MONGO_DNS_SERVERS=1.1.1.1,8.8.8.8
+MONGO_DNS_SERVERS=1.1.1.1,8.8.8.8  # optional
 ```
+
+Set these values as environment variables in your deployment platform. Keep `.env` local and never commit credentials. Set `NODE_ENV=production` in production.
 
 ### Installation
 
@@ -123,6 +126,8 @@ Then open:
 http://localhost:8080
 ```
 
+To load the development demo listings and accounts, set `SEED_DEMO_PASSWORD` to a strong local password and run `npm run seed`. The seeder refuses to run when `NODE_ENV=production`.
+
 ## 🧭 Main Routes
 
 - `/` → Redirects to the listings home page
@@ -139,6 +144,7 @@ http://localhost:8080
 - Listing images are uploaded to Cloudinary instead of local storage.
 - Sessions are persisted in MongoDB via `connect-mongo`.
 - The server automatically starts only outside the test environment.
+- Run `npm test` to execute the automated tests.
 
 ## 📜 License
 

@@ -21,3 +21,21 @@
   border-radius: 25px;
   padding: 0.5rem 3rem 0.5rem 3rem;
 }
+
+@media (max-width: 767.98px) {
+  .navbar-collapse {
+    padding: 0.75rem 0 1rem;
+    background-color: #fff;
+  }
+
+  .search-form {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.5rem 0;
+  }
+
+  .search-form .search-input {
+    flex: 1 1 100%;
+    margin-right: 0 !important;
+  }
+}

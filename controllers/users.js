@@ -1,15 +1,7 @@
 import User from "../models/user.js";
+import sanitizeRedirect from "../utils/sanitizeRedirect.js";
 
 // Authentication controller: handles registration, login, and logout plus redirect safety.
-const sanitizeRedirect = (value, fallback = "/listings") => {
-    if (typeof value !== "string") return fallback;
-    const trimmed = value.trim();
-    if (!trimmed || trimmed.startsWith("//") || !trimmed.startsWith("/")) {
-        return fallback;
-    }
-    return trimmed;
-};
-
 const renderSignupForm = (req, res) => {
     res.render("users/signup.ejs");
 };
